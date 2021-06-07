@@ -24,10 +24,6 @@ HEIGHT = 700
 DISPLAYSURF = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption('Falling Cubes')
 
-# Музыка
-pg.mixer.music.load('music/stage_1.wav')
-pg.mixer.music.play(-1)
-
 # FPS
 fps = 30
 fpsclock = pg.time.Clock()
@@ -64,7 +60,36 @@ score_color = red
 
 # шрифты
 score_msg = pg.font.SysFont('comicsansms', 50)
+
 running = True
+opening_menu = True
+
+CHANGE_LOCATION = pg.USEREVENT + 1
+pg.time.set_timer(CHANGE_LOCATION, 5000)
+# меню
+while opening_menu:
+    for event in pg.event.get():
+    # выход
+        if event.type == pg.QUIT:
+            opening_menu = False
+            running = False
+            break
+
+        if event.type == CHANGE_LOCATION:
+            background_colour = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+
+    # отрисовка
+    DISPLAYSURF.fill(background_colour)
+
+    # обновление экрана
+    pg.display.update()
+
+    # выдержка FPS
+    fpsclock.tick(fps)
+
+# Музыка
+pg.mixer.music.load('music/stage_1.wav')
+pg.mixer.music.play(-1)
 
 # Игровой цикл
 while running:
