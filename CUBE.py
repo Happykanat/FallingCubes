@@ -11,10 +11,13 @@ from button import Button
 pg.init()
 
 # цвета
+city = (230,250,255)
+reef = (0,100,100)
+forest = (50, 125, 0)
+mushroom_forest = (50,10,50)
 red = (255, 0, 0)
 dark_blue = (0, 13, 119)
-light_green = (160, 255, 162)
-background_colour = light_green
+background_colour = forest
 pause_bg_color = (0, 0, 0)
 transparency = 200
 
@@ -61,22 +64,30 @@ score_color = red
 # шрифты
 score_msg = pg.font.SysFont('comicsansms', 50)
 
+# Музыка
+pg.mixer.music.load('music/menu.wav')
+pg.mixer.music.play(-1)
+
+# циклы
 running = True
 opening_menu = True
 
+# смена локации
 CHANGE_LOCATION = pg.USEREVENT + 1
 pg.time.set_timer(CHANGE_LOCATION, 5000)
+
 # меню
 while opening_menu:
     for event in pg.event.get():
-    # выход
+
+        # выход
         if event.type == pg.QUIT:
             opening_menu = False
             running = False
             break
 
         if event.type == CHANGE_LOCATION:
-            background_colour = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+            background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
     # отрисовка
     DISPLAYSURF.fill(background_colour)
@@ -88,7 +99,7 @@ while opening_menu:
     fpsclock.tick(fps)
 
 # Музыка
-pg.mixer.music.load('music/stage_1.wav')
+pg.mixer.music.load('music/locations_songs/forest.wav')
 pg.mixer.music.play(-1)
 
 # Игровой цикл
@@ -144,7 +155,7 @@ while running:
     if collided:
         background_colour = red
     else:
-        background_colour = light_green
+        background_colour = forest
 
     # обработка событий
     event: Event
