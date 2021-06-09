@@ -60,6 +60,7 @@ score = 0
 score_color = red
 
 # кнопки
+start_button = Button(200,300,'Images/start_button 50X50.png')
 
 # шрифты
 score_msg = pg.font.SysFont('comicsansms', 50)
@@ -86,11 +87,19 @@ while opening_menu:
             running = False
             break
 
+        # старт по кнопке
+        if event.type == pg.MOUSEBUTTONUP:
+            mx, my = event.pos
+            if start_button.pressed(mx, my):
+                opening_menu = False
+
+        # рандомные цвета
         if event.type == CHANGE_LOCATION:
             background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
 
     # отрисовка
     DISPLAYSURF.fill(background_colour)
+    start_button.blit(DISPLAYSURF)
 
     # обновление экрана
     pg.display.update()
