@@ -61,6 +61,7 @@ score_color = red
 
 # кнопки
 start_button = Button(200,300,'Images/start_button 50X50.png')
+exit_button = Button(100,200,'Images/exit.png')
 
 # шрифты
 score_msg = pg.font.SysFont('comicsansms', 50)
@@ -72,6 +73,7 @@ pg.mixer.music.play(-1)
 # циклы
 running = True
 opening_menu = True
+game_over = False
 
 # смена локации
 CHANGE_LOCATION = pg.USEREVENT + 1
@@ -151,20 +153,19 @@ while running:
             enemy_speed_step += enemy_step
             hero.step += 0.8
 
-    # обработка столкновения топора/героя с врагами
+    # обработка столкновения топора с врагами
     collided = False
     for enemy_rect in enemies_rects:
         if hero.axe_rect.colliderect(enemy_rect):
             enemy_rect.x = random.randrange(0, WIDTH, step_x)
             enemy_rect.y = random.randrange(-HEIGHT, -enemy_rect.height, enemy_rect.height)
             score += 5
+
+    # game over
         if hero.rect.colliderect(enemy_rect):
-            collided = True
+            running = False
+            game_over = True
             break
-    if collided:
-        background_colour = red
-    else:
-        background_colour = forest
 
     # обработка событий
     event: Event
@@ -231,6 +232,24 @@ while running:
     for enemy_rect in enemies_rects:
         DISPLAYSURF.blit(enemy_pic, enemy_rect)
     DISPLAYSURF.blit(score_surf, (30, 30))  # todo убрать координаты в переменную
+
+    # обновление экрана
+    pg.display.update()
+
+    # выдержка FPS
+    fpsclock.tick(fps)
+
+pg.mixer.music.stop()
+
+while game_over:
+    for event in pg.event.get():
+
+        if event.type == pg.MOUSEBUTTONUP:
+            mx, my = event.pos
+            if exit_button.pressed(mx, my):
+                game_over = False
+                break
+    exit_button.blit(DISPLAYSURF)
 
     # обновление экрана
     pg.display.update()
