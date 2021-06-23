@@ -11,15 +11,20 @@ from button import Button
 pg.init()
 
 # цвета
-city = (230,250,255)
-reef = (0,100,100)
-forest = (50, 125, 0)
-mushroom_forest = (50,10,50)
 red = (255, 0, 0)
 dark_blue = (0, 13, 119)
-background_colour = forest
 pause_bg_color = (0, 0, 0)
 transparency = 200
+
+# локации
+city = (230,250,255)
+reef = (0,100,100)
+forest = pg.image.load('Images/forest_background.png')
+mushroom_forest = pg.image.load('Images/mushroom_forest_background.png')
+locations = [forest,mushroom_forest]
+end_loc = len(locations)
+background_colour = forest
+menu_loc = 0
 
 # создание окна
 WIDTH = 500
@@ -77,7 +82,7 @@ game_over = False
 
 # смена локации
 CHANGE_LOCATION = pg.USEREVENT + 1
-pg.time.set_timer(CHANGE_LOCATION, 5000)
+pg.time.set_timer(CHANGE_LOCATION, 1000)
 
 # меню
 while opening_menu:
@@ -97,10 +102,14 @@ while opening_menu:
 
         # рандомные цвета
         if event.type == CHANGE_LOCATION:
-            background_colour = (random.randint(0,255),random.randint(0,255),random.randint(0,255))
+            if menu_loc < end_loc:
+                background_colour = locations[menu_loc]
+                menu_loc += 1
+            else:
+                menu_loc = 0
 
     # отрисовка
-    DISPLAYSURF.fill(background_colour)
+    DISPLAYSURF.blit(background_colour,(0,0))
     start_button.blit(DISPLAYSURF)
 
     # обновление экрана
@@ -227,7 +236,7 @@ while running:
     score_surf = score_msg.render(f'{score}', True, score_color)
 
     # отрисовка
-    DISPLAYSURF.fill(background_colour)
+    DISPLAYSURF.blit(background_colour,(0,0))
     hero.blit_me(DISPLAYSURF)
     for enemy_rect in enemies_rects:
         DISPLAYSURF.blit(enemy_pic, enemy_rect)
