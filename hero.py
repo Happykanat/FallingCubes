@@ -2,7 +2,7 @@ import pygame
 
 
 class Hero():
-    def __init__(self, hero_x=150, hero_y=610, step=12, WIDTH=500):
+    def __init__(self, hero_x=150, hero_y=530, step=12, WIDTH=500):
         self.hero_image = pygame.image.load("Images/AXE CUBE 70x70.png")
         self.WIDTH = WIDTH
         self.rect = self.hero_image.get_rect()
