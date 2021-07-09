@@ -2,39 +2,38 @@ import pygame as pg
 
 class Axe():
     def __init__(self, throw_speed = 12, sound = 'music/axe_throwing.wav', cooldown = 10, ):
+        self.throwing = False
         self.axe_index = 0
         self.axe_images = []
         self.throw_speed = throw_speed
         self.sound = pg.mixer.Sound(sound)
         self.current_time = pg.time.get_ticks()
         self.basic_time = 0
-        for i in range(7):
+        for i in range(8):
             self.axe_images.append(pg.image.load(f'Images/axe{i}.png'))
         self.rect = self.axe_images[0].get_rect()
 
 
     def use(self, xs, ys):
-        self.throwing = True
-        self.rect.x = xs
-        self.rect.y = ys
         self.current_time = pg.time.get_ticks()
         if self.current_time - 1000 >= self.basic_time:
             self.basic_time = pg.time.get_ticks()
-            pg.mixer.music.play( self.sound)
 
-        # if self.rect.y >= -1000:
-        #     self.rect.y -= 12
-        #     self.axe_index += 1
-        #     if self.axe_index > 7:
-        #         self.axe_index = 0
-        # else:
-        #     self.throwing = False
-
-
+            self.sound.play()
+            self.throwing = True
+            self.rect.x = xs
+            self.rect.y = ys
 
     def blit(self, surface):
-        surface.blit(self.axe_images[1], self.rect)
-
+        if self.throwing == True:
+            surface.blit(self.axe_images[self.axe_index], self.rect)
+            if self.rect.y >= -1000:
+                self.rect.y -= 12
+                self.axe_index += 1
+                if self.axe_index > 7:
+                    self.axe_index = 0
+            else:
+                self.throwing = False
     # Логика топора
     '''self.axe_images = []
     self.axe_sound = pygame.mixer.Sound('music/axe_throwing.wav')
