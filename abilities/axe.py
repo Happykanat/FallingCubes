@@ -34,29 +34,3 @@ class Axe():
                     self.axe_index = 0
             else:
                 self.throwing = False
-    # Логика топора
-    '''self.axe_images = []
-    self.axe_sound = pygame.mixer.Sound('music/axe_throwing.wav')
-    for axe_num in range(8):
-        self.axe_images.append(pygame.image.load(f'Images/axe{axe_num}.png'))
-
-    self.axe_rect = self.axe_images[0].get_rect()
-
-    self.throwing = False
-    self.axe_index = 0
-
-    if self.throwing == True:
-        if self.axe_rect.y >= -1000:
-            self.axe_rect.y -= 12
-            display_surface.blit(self.axe_images[self.axe_index], self.axe_rect)
-            self.axe_index += 1
-            if self.axe_index > 7:
-                self.axe_index = 0
-        else:
-            self.throwing = False'''
-
-    '''def throw_axe(self):
-            self.throwing = True
-            self.axe_rect.x = self.rect.x
-            self.axe_rect.y = self.rect.y
-            self.axe_sound.play()'''
