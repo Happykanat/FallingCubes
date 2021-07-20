@@ -19,10 +19,10 @@ transparency = 200
 
 # локации
 city = pg.image.load('Images/city_background.png')
-reef = (0,100,100)
+reef = pg.image.load('Images/reef_background.png')
 forest = pg.image.load('Images/forest_background.png')
 mushroom_forest = pg.image.load('Images/mushroom_forest_background.png')
-locations = [forest, mushroom_forest,city]
+locations = [forest, mushroom_forest, city, reef]
 end_loc = len(locations)
 background_colour = forest
 menu_loc = 0
