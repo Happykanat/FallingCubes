@@ -4,6 +4,7 @@ import pygame as pg
 from pygame.event import Event
 
 from hero import Hero
+from enemies.enemies import Enemies
 from button import Button
 from abilities.axe import Axe
 
@@ -47,18 +48,26 @@ cooldown_time = 10  # sec
 frame_counter = cooldown_time * fps
 
 # создание врагов
-enemy_speed_step = 12
-enemy_time = 10  # секунды
-enemy_step = 1
-max_enemy_speed = 20
-enemies_rects = []
-enemy_pic = pg.image.load('Images/enemy cube.png')
-step_x = int(1.25 * axe_cube.rect.width)
-for _ in range(10):
-    enemy_rect = enemy_pic.get_rect().copy()
-    enemy_rect.x = random.randrange(0, WIDTH, step_x)
-    enemy_rect.y = random.randrange(-HEIGHT, -enemy_rect.height, enemy_rect.height)
-    enemies_rects.append(enemy_rect)
+enemies_description = [
+    ['reef', 5],
+    ['common', 5],
+]
+
+
+enemies = Enemies(enemies_description)
+
+# enemy_speed_step = 12
+# enemy_time = 10  # секунды
+# enemy_step = 1
+# max_enemy_speed= 20
+# enemies_rects = []
+# enemy_pic = pg.image.load('Images/enemy cube.png')
+# step_x = int(1.25 * axe_cube.rect.width)
+# for _ in range(10):
+#     enemy_rect = enemy_pic.get_rect().copy()
+#     enemy_rect.x = random.randrange(0, WIDTH, step_x)
+#     enemy_rect.y = random.randrange(-HEIGHT, -enemy_rect.height, enemy_rect.height)
+#     enemies_rects.append(enemy_rect)
 
 # Пауза
 paused = False
@@ -141,45 +150,32 @@ while running:
     else:
         cooldown_text = f'{cooldown_left:.0f} sec'
 
-    # обработка изменения счёта
-    for enemy_rect in enemies_rects:
-        if enemy_rect.top >= axe_cube.rect.bottom:
-            if enemy_rect.top <= axe_cube.rect.bottom + enemy_speed_step:
-                score += 1
-            # a = a + 1 ~ a += 1
+    # # обработка изменения счёта
+    # for enemy_rect in enemies_rects:
+    #     if enemy_rect.top >= axe_cube.rect.bottom:
+    #         if enemy_rect.top <= axe_cube.rect.bottom + enemy_speed_step:
+    #             score += 1
 
     # обработка движения главного героя
     key = pg.key.get_pressed()
     if key[pg.K_a]: axe_cube.move_left()
     if key[pg.K_d]: axe_cube.move_right()
 
-    # логика падающих кубиков
-    for enemy_rect in enemies_rects:
-        if enemy_rect.top <= HEIGHT:
-            enemy_rect.y += enemy_speed_step
-        else:
-            enemy_rect.x = random.randrange(0, WIDTH, step_x)
-            enemy_rect.y = random.randrange(-HEIGHT, -enemy_rect.height, enemy_rect.height)
+    enemies.move()
 
-    # увеличение скорости врагов и героя
-    if enemy_speed_step < max_enemy_speed:
-        if seconds_passed % enemy_time == 0:
-            enemy_speed_step += enemy_step
-            axe_cube.step += 0.8
-
-    # обработка столкновения топора с врагами
-    # collided = False
+    # # логика падающих кубиков
     # for enemy_rect in enemies_rects:
-    #     if axe_cube.axe_rect.colliderect(enemy_rect):
+    #     if enemy_rect.top <= HEIGHT:
+    #         enemy_rect.y += enemy_speed_step
+    #     else:
     #         enemy_rect.x = random.randrange(0, WIDTH, step_x)
     #         enemy_rect.y = random.randrange(-HEIGHT, -enemy_rect.height, enemy_rect.height)
-    #         score += 5
     #
-    #      # game over
-    #     if axe_cube.rect.colliderect(enemy_rect):
-    #         running = False
-    #         game_over = True
-    #         break
+    # # увеличение скорости врагов и героя
+    # if enemy_speed_step < max_enemy_speed:
+    #     if seconds_passed % enemy_time == 0:
+    #         enemy_speed_step += enemy_step
+    #         axe_cube.step += 0.8
 
     # обработка событий
     for event in pg.event.get():
@@ -240,8 +236,9 @@ while running:
     # отрисовка
     DISPLAYSURF.blit(background_colour,(0,0))
     axe_cube.blit_me(DISPLAYSURF)
-    for enemy_rect in enemies_rects:
-        DISPLAYSURF.blit(enemy_pic, enemy_rect)
+    enemies.blit_enemies(DISPLAYSURF)
+    # for enemy_rect in enemies_rects:
+    #     DISPLAYSURF.blit(enemy_pic, enemy_rect)
     DISPLAYSURF.blit(score_surf, (30, 30))  # todo убрать координаты в переменную
 
     # обновление экрана

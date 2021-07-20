@@ -1,19 +1,28 @@
+from enemies.reef_enemy_ability import ReefEnemyAbility
 import pygame as pg
 import random
 
 class Enemy:
-    def __init__(self, surface, speed, step_x=100, HEIGHT=700, WIDTH=500, step_speed=12, max_speed=20, speed_cooldown=10):
+    def __init__(self, kind, speed, step_x=100, HEIGHT=700, WIDTH=500, step_speed=12, max_speed=20, speed_cooldown=10):
+        self.kind = kind
         self.speed = speed
-        self.surface = surface
-        self.image = pg.image.load('Images/enemy cube.png')
-        self.rect = self.image.get_rect()
         self.HEIGHT = HEIGHT
         self.step_x = step_x
-        self.step_y = self.rect.height
         self.step_speed = step_speed
         self.max_speed = max_speed
         self.DISPLAY_WIDTH = WIDTH
         self.speed_cooldown = speed_cooldown
+
+        if self.kind == 'reef':
+            self.image = pg.image.load('Images/Forest_Enemy.png')
+            self.rect = self.image.get_rect()
+            self.ability = ReefEnemyAbility
+        else:
+            self.image = pg.image.load('Images/enemy cube.png')
+            self.rect = self.image.get_rect()
+            self.ability = None
+
+        self.step_y = self.rect.height
 
     def set_start_pos(self):
         self.rect.x = random.randrange(0, self.DISPLAY_WIDTH, self.step_x)
@@ -26,8 +35,8 @@ class Enemy:
         else:
             self.set_start_pos()
 
-    def blit(self):
-        self.surface.blit(self.image, self.rect)
+    def blit(self, surface):
+        surface.blit(self.image, self.rect)
 
     def collided_hero(self, hero):
         if hero.rect.colliderect(self.rect):
